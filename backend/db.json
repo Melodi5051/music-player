@@ -1,0 +1,60 @@
+{
+  "audioFiles": [
+    {
+      "id": 1,
+      "title": "Dark Knight Dummo",
+      "author": "Trippie Redd feat. Travis Scott",
+      "photo": "/Dark Knight Dummo.jpg",
+      "file": "/Dark Knight Dummo.mp3",
+      "duration": "256"
+    },
+    {
+      "id": 2,
+      "title": "Falling",
+      "author": "Trevor Daniel",
+      "photo": "/Falling.png",
+      "file": "/Falling.mp3",
+      "duration": "159"
+    },
+    {
+      "id": 4,
+      "title": "Godzilla",
+      "author": "Eminem feat. Juice WRLD",
+      "photo": "/Godzilla.jpg",
+      "file": "/Godzilla.mp3",
+      "duration": "210"
+    },
+    {
+      "id": 5,
+      "title": "Hide",
+      "author": "Juice WRLD feat. Seezyn",
+      "photo": "/Hide.jpg",
+      "file": "/Hide.mp3",
+      "duration": "210"
+    },
+    {
+      "id": 6,
+      "title": "Never",
+      "author": "Trevor Daniel",
+      "photo": "/Never.jpg",
+      "file": "/Never.mp3",
+      "duration": "210"
+    },
+    {
+      "id": 7,
+      "title": "Rockstar",
+      "author": "Post Malone feat. 21 Savage",
+      "photo": "/Rockstar.jpg",
+      "file": "/Rockstar.mp3",
+      "duration": "210"
+    },
+    {
+      "id": 8,
+      "title": "Sunflower",
+      "author": "Post Malone, Swae Lee",
+      "photo": "/Sunflower.jpg",
+      "file": "/Sunflower.mp3",
+      "duration": "210"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+.list-item {
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  position: relative;
+
+  .list-btn {
+    background: #4083ff;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 17px;
+    top: 13px;
+    border-radius: 2rem;
+    padding: 0;
+    svg {
+      height: 24px;
+      fill: #ffffff;
+    }
+  }
+  &:hover {
+    background: #4083ff42;
+  }
+
+  .list-content {
+    display: flex;
+    gap: 5px;
+
+    .list-content-img {
+      border-radius: 0.8rem;
+    }
+  }
+}
