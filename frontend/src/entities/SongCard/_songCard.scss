@@ -1,0 +1,17 @@
+.song-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #e2f0ff25;
+  padding: 0 1rem;
+  border-radius: 1rem;
+  width: 100%;
+  cursor: pointer;
+
+  .song-card-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+  }
+}

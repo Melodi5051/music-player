@@ -29,10 +29,10 @@ function useGetAllSong() {
   return songData;
 }
 
-function SongProvider({ children }: children) {
+function SongProviderContext({ children }: children) {
   const songData = useGetAllSong();
   return (
     <SongContext.Provider value={songData}>{children}</SongContext.Provider>
   );
 }
-export { SongProvider, SongContext };
+export { SongProviderContext, SongContext };

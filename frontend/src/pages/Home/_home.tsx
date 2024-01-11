@@ -1,12 +1,15 @@
+import { SongControllerProvider } from '~/shared/_useSongContent';
 import SongList from '~/widgets/SongList';
-import { SongProvider } from '~/widgets/SongList/hook/useSongContext';
+import { SongProviderContext } from '~/widgets/SongList/hook/useSongContext';
 
 export function Home() {
   return (
     <div>
-      <SongProvider>
-        <SongList />
-      </SongProvider>
+      <SongProviderContext>
+        <SongControllerProvider>
+          <SongList />
+        </SongControllerProvider>
+      </SongProviderContext>
     </div>
   );
 }
