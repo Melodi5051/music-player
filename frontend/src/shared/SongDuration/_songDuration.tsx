@@ -1,19 +1,31 @@
+import { useEffect, useState } from 'react';
 import './_songDuration.scss';
 
-import { ISong } from '~/widgets/types/song';
-
-type SongDurationProps = Pick<ISong, 'duration'> & { type: string };
-
+interface SongDurationProps {
+  duration: number;
+  currentSongId: number | null;
+  id: number;
+  type: 'default' | 'reverse' | 'play';
+}
 export function SongDuration({ ...props }: SongDurationProps) {
-  const duration =
-    props.type === 'reverse'
-      ? '-' + props.duration
-      : Math.floor(props.duration / 60) + ':' + Math.floor(props.duration % 60);
+  const formatDuration = (duration: number) => {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+
+    const formattedMinutes = minutes.toString().padStart(1, '0');
+    const formattedSeconds = seconds.toString().padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+  };
 
   const className =
     props.type === 'reverse'
       ? 'song-card-duration-reverse'
       : 'song-card-duration-default';
 
-  return <p className={className}>{duration}</p>;
+  if (props.type === 'play' && props.id === props.currentSongId) {
+    return <p className={className}>{formatDuration(props.duration)}</p>;
+  }
+
+  return <p className={className}>{formatDuration(props.duration)}</p>;
 }

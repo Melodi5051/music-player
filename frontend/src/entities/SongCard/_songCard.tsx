@@ -5,25 +5,36 @@ import { SongContent } from '~/shared/SongContent';
 import { SongDuration } from '~/shared/SongDuration';
 import { SongLogo } from '~/shared/SongLogo';
 
+
 interface SongCardProps extends ISong {
   handleSongCardClick: (file: string, id: number) => void;
+  currentSong: HTMLAudioElement | null;
+  status: boolean;
+  currentSongId: number | null;
 }
 
 export function SongCard({ ...props }: SongCardProps) {
   return (
-    <button
-      style={{ border: 'none', background: 'none', padding: '0' }}
+    <div
+      className='song-card'
       onClick={() => {
         props.handleSongCardClick(props.file, props.id);
       }}
     >
-      <div className="song-card">
-        <div className="song-card-content">
-          <SongLogo {...props} type="default" />
-          <SongContent {...props} />
-        </div>
-        <SongDuration {...props} type="reverse" />
+      <div className='song-card-content'>
+        <SongLogo {...props} type='default' />
+        <SongContent {...props} />
       </div>
-    </button>
+      <SongDuration
+        {...props}
+        duration={
+          props.currentSong && props.currentSongId === props.id
+            ? props.currentSong.currentTime
+            : props.duration
+        }
+        currentSongId={props.currentSongId}
+        type={props.status ? 'play' : 'default'}
+      />
+    </div>
   );
 }
