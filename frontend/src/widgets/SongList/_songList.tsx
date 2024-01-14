@@ -16,7 +16,6 @@ export function SongList() {
     setCurrentSongId,
     currentSong,
     intervaleDuration,
-    setIntervaleDuration
   } = useSongContent();
 
   //Проверка на пустой контекст
@@ -30,7 +29,6 @@ export function SongList() {
         setCurrentSongId={setCurrentSongId}
         currentSong={currentSong}
         intervaleDuration={intervaleDuration}
-        setIntervaleDuration={setIntervaleDuration}
       />
     ))
   ) : (

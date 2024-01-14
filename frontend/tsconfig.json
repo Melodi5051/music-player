@@ -25,6 +25,7 @@
 
     /* Advanced Options */
     "esModuleInterop": true, // Разрешает использование import/export с CommonJS модулями
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true, // Проверка на согласование имен файлов
     "noImplicitReturns": true, // Все ветки функции должны иметь return или throw
     "noImplicitAny": true, // Запрещает неявный any
