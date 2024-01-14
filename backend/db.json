@@ -30,7 +30,7 @@
       "author": "Juice WRLD feat. Seezyn",
       "photo": "/Hide.jpg",
       "file": "/Hide.mp3",
-      "duration": "210"
+      "duration": "206"
     },
     {
       "id": 6,
@@ -38,7 +38,7 @@
       "author": "Trevor Daniel",
       "photo": "/Never.jpg",
       "file": "/Never.mp3",
-      "duration": "210"
+      "duration": "176"
     },
     {
       "id": 7,
@@ -46,7 +46,7 @@
       "author": "Post Malone feat. 21 Savage",
       "photo": "/Rockstar.jpg",
       "file": "/Rockstar.mp3",
-      "duration": "210"
+      "duration": "218"
     },
     {
       "id": 8,
@@ -54,7 +54,7 @@
       "author": "Post Malone, Swae Lee",
       "photo": "/Sunflower.jpg",
       "file": "/Sunflower.mp3",
-      "duration": "210"
+      "duration": "157"
     }
   ]
 }
