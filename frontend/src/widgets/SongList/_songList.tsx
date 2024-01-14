@@ -13,9 +13,10 @@ export function SongList() {
   const {
     status,
     currentSongId,
-    setStatus,
     setCurrentSongId,
     currentSong,
+    intervaleDuration,
+    setIntervaleDuration
   } = useSongContent();
 
   //Проверка на пустой контекст
@@ -26,9 +27,10 @@ export function SongList() {
         {...song}
         status={status}
         currentSongId={currentSongId}
-        setStatus={setStatus}
         setCurrentSongId={setCurrentSongId}
         currentSong={currentSong}
+        intervaleDuration={intervaleDuration}
+        setIntervaleDuration={setIntervaleDuration}
       />
     ))
   ) : (

@@ -4,75 +4,96 @@ import { ISong } from '~/widgets/types/song';
 import { SongContent } from '~/shared/SongContent';
 import { SongDuration } from '~/shared/SongDuration';
 import { SongLogo } from '~/shared/SongLogo';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface SongCardProps extends ISong {
-  status: boolean;
+  status: React.MutableRefObject<boolean>;
   currentSongId: number | null;
-  setStatus: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentSongId: React.Dispatch<React.SetStateAction<number | null>>;
   currentSong: React.MutableRefObject<HTMLAudioElement | null>;
+  intervaleDuration: NodeJS.Timer | null;
+  setIntervaleDuration: React.Dispatch<
+    React.SetStateAction<NodeJS.Timer | null>
+  >;
 }
 
 export function SongCard({ ...props }: SongCardProps) {
   const [duration, setDuration] = useState(props.duration);
-  const [statusView, setStatusView] = useState(props.status);
-  
+  const [statusView, setStatusView] = useState(props.status.current);
+
   function SetNewMusic() {
     const audio = new Audio(`http://localhost:3000/${props.file}`);
+
     if (props.currentSong.current) {
-      PauseMusic(props.currentSong.current);
+      pauseMusic(props.currentSong.current);
     }
+
     audio.onloadedmetadata = () => {
       setDuration(audio.duration);
       props.currentSong.current = audio;
       audio.volume = 0.05;
-      PlayMusic(audio);
+      playMusic(audio);
     };
+
     props.setCurrentSongId(props.id);
-    props.setStatus(true);
+    props.status.current = true;
   }
 
-  function PlayMusic(audio: HTMLAudioElement) {
+  function playMusic(audio: HTMLAudioElement) {
+    setDuration(audio.currentTime);
+
+    const timer = setInterval(() => {
+      if (duration <= props.duration) {
+        setDuration(audio.currentTime);
+      }
+    }, 1000);
+
+    props.setIntervaleDuration(timer);
+
     audio.play();
-    props.setStatus(true);
+    props.status.current = true;
   }
-  function PauseMusic(audio: HTMLAudioElement) {
+  function pauseMusic(audio: HTMLAudioElement) {
+    if (props.intervaleDuration) {
+      clearInterval(+props.intervaleDuration);
+    }
     audio.pause();
-    props.setStatus(false);
+    props.status.current = false;
   }
 
   function handlePlay() {
     if (props.currentSongId !== props.id) {
       setStatusView(true);
       SetNewMusic();
+
       return;
     }
+
     if (statusView && props.currentSong.current) {
-      PauseMusic(props.currentSong.current);
+      pauseMusic(props.currentSong.current);
       setStatusView(false);
       return;
     }
+
     if (props.currentSong.current) {
-      PlayMusic(props.currentSong.current);
+      playMusic(props.currentSong.current);
       setStatusView(true);
       return;
     }
   }
 
-  // useEffect(() => {
-
-  // }, [duration, statusView]);
-
+  useEffect(() => {
+    if (props.currentSongId !== props.id) {
+      setDuration(props.duration);
+    }
+  });
   return (
     <div className='song-card' onClick={handlePlay}>
       <div className='song-card-content'>
         <SongLogo {...props} type='default' />
         <SongContent {...props} />
       </div>
-      {props.currentSongId === props.id && (
-        <div>{statusView ? 'Воспроизведение' : 'Пауза'}</div>
-      )}
+
       <SongDuration duration={duration} type='default' />
     </div>
   );

@@ -9,8 +9,7 @@ interface SongControllerContextProps {
   currentSongId: number | null;
   setCurrentSongId: React.Dispatch<React.SetStateAction<number | null>>;
 
-  status: boolean;
-  setStatus: React.Dispatch<React.SetStateAction<boolean>>;
+  status: React.MutableRefObject<boolean>;
 
   intervaleDuration: NodeJS.Timer | null;
   setIntervaleDuration: React.Dispatch<
@@ -20,9 +19,8 @@ interface SongControllerContextProps {
 
 const SongControllerContext = createContext<SongControllerContextProps>({
   currentSong: { current: null },
-  status: false,
+  status: { current: false },
 
-  setStatus: () => {},
   currentSongId: null,
 
   intervaleDuration: null,
@@ -32,7 +30,7 @@ const SongControllerContext = createContext<SongControllerContextProps>({
 });
 
 const useSongContent = () => {
-  const [status, setStatus] = useState(false);
+  const status = useRef<boolean>(false);
   const currentSong = useRef<HTMLAudioElement | null>(null);
   const [currentSongId, setCurrentSongId] = useState<number | null>(null);
   const [intervaleDuration, setIntervaleDuration] =
@@ -41,7 +39,6 @@ const useSongContent = () => {
   const songData = {
     currentSong,
     status,
-    setStatus,
 
     currentSongId,
     setCurrentSongId,
