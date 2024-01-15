@@ -15,7 +15,6 @@ interface SongCardProps extends ISong {
 
 function progressDuration(duration: number): number {
   const progress = (1 / duration) * 100
-  console.log(progress)
   return progress
 }
 
@@ -47,9 +46,13 @@ export function SongCard({ ...props }: SongCardProps) {
     setDuration(audio.currentTime)
 
     const timer = setInterval(() => {
-      if (duration <= props.duration && propgressView <= 100) {
-        setDuration(audio.currentTime)
-        setPropgressView(propgressView => propgressView + progress.current)
+      const currentPercentage = (audio.currentTime / audio.duration) * 100
+      setPropgressView(currentPercentage)
+      setDuration(audio.currentTime)
+      if (audio.currentTime >= audio.duration) {
+        clearInterval(timer)
+        props.status.current = false
+        setPropgressView(0)
       }
     }, 1000)
 
@@ -93,10 +96,11 @@ export function SongCard({ ...props }: SongCardProps) {
       setDuration(props.duration)
     }
   })
+
   return (
     <div className="flex flex-col w-full items-center justify-center">
       <div
-        className="flex items-center justify-around bg-[#e2f0ff25] py-0 px-4 rounded-xl w-full cursor-pointer"
+        className="flex items-center justify-around dark:bg-[#e2f0ff25]  py-0 px-4 rounded-xl w-full cursor-pointer"
         onClick={handlePlay}
       >
         <div className="flex items-center w-full gap-4">
@@ -106,7 +110,14 @@ export function SongCard({ ...props }: SongCardProps) {
         <SongDuration duration={duration} type="default" />
       </div>
       {props.currentSongId === props.id ? (
-        <SongController status={statusView} duration={propgressView} />
+        <SongController
+          status={statusView}
+          duration={propgressView}
+          currentSong={props.currentSong.current as HTMLAudioElement}
+          setPropgressView={setPropgressView}
+          setDuration={setDuration}
+          fullDuration={props.duration}
+        />
       ) : null}
     </div>
   )
