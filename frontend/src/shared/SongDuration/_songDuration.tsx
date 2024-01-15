@@ -1,28 +1,27 @@
-import './_songDuration.scss';
-import { ISong } from '~/widgets/types/song';
+import { ISong } from '~/widgets/types/song'
 
 type SongDurationProps = Pick<ISong, 'duration'> & {
-  type: 'default' | 'play';
-};
+  type: 'default' | 'play'
+}
 export function SongDuration({ ...props }: SongDurationProps) {
   const formatDuration = (duration: number) => {
-    const minutes = Math.floor(duration / 60);
-    const seconds = Math.floor(duration % 60);
+    const minutes = Math.floor(duration / 60)
+    const seconds = Math.floor(duration % 60)
 
-    const formattedMinutes = minutes.toString().padStart(1, '0');
-    const formattedSeconds = seconds.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(1, '0')
+    const formattedSeconds = seconds.toString().padStart(2, '0')
 
-    return `${formattedMinutes}:${formattedSeconds}`;
-  };
+    return `${formattedMinutes}:${formattedSeconds}`
+  }
 
   const className =
     props.type === 'play'
       ? 'song-card-duration-play'
-      : 'song-card-duration-default';
+      : 'song-card-duration-default'
 
   // if (props.type === 'play' && props.id === props.currentSongId) {
   //   return <p className={className}>{formatDuration(props.duration)}</p>;
   // }
 
-  return <p className={className}>{formatDuration(props.duration)}</p>;
+  return <p className={className}>{formatDuration(props.duration)}</p>
 }

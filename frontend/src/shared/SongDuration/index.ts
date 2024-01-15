@@ -1,1 +1,1 @@
-export { SongDuration } from './_songDuration';
+export { SongDuration } from './_songDuration'

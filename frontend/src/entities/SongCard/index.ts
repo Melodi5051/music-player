@@ -1,1 +1,1 @@
-export { SongCard } from './_songCard';
+export { SongCard } from './_songCard'

@@ -1,2 +1,2 @@
-import { SongList } from './_songList';
-export default SongList;
+import { SongList } from './_songList'
+export default SongList

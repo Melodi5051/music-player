@@ -1,1 +1,1 @@
-export { SongLogo } from './_songLogo';
+export { SongLogo } from './_songLogo'

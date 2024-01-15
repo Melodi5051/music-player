@@ -1,1 +1,1 @@
-export { SongContent } from './_songContent';
+export { SongContent } from './_songContent'

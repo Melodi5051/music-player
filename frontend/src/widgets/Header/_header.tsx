@@ -1,9 +1,9 @@
-import logo from '~/../public/logo.png';
-import './_header.scss';
+import logo from './../../../public/logo.png'
+
 export function Header() {
   return (
-    <header>
-      <img width={150} src={logo} alt="logo" />
+    <header className="w-full flex items-center p-2">
+      <img className="w-[150px]" src={logo} alt="logo" />
     </header>
-  );
+  )
 }

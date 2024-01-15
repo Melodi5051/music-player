@@ -1,8 +1,8 @@
-import React, { Suspense } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import Layout from '~/pages/Layout';
+import React, { Suspense } from 'react'
+import { createBrowserRouter } from 'react-router-dom'
+import Layout from '~/pages/Layout'
 
-const Home = React.lazy(() => import('~/pages/Home'));
+const Home = React.lazy(() => import('~/pages/Home'))
 
 export const Router = createBrowserRouter([
   {
@@ -27,4 +27,4 @@ export const Router = createBrowserRouter([
       },
     ],
   },
-]);
+])

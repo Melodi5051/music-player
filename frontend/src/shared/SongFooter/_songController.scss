@@ -1,66 +1,17 @@
-.song-controller {
-    animation-duration: 0.5s;
-    animation-name: progress;
-    border-radius: 0.5rem;
-    display: flex;
-    background: rgba(255, 255, 255, 0.644);
-    gap: 1rem;
-    width: 100%;
-    align-items: center;
-    padding: 0 1rem;
-
-    .song-controller-progress {
-        height: 4px;
-        width: 100%;
-        border-radius: 0.7rem;
-        .song-controller-progress-bar {
-            height: 4px;
-            background: #000;
-            border-radius: 0.7rem;
-            .song-controller-progress-bar-inner {
-                height: 4px;
-                border-radius: 0.7rem;
-                background: #ff8585;
-            }
-        }
-    }
-
-    .song-controller-volume {
-        display: flex;
-        align-items: center;
-        border-radius: 0.7rem;
-
-        .song-controller-volume-bar {
-            transition: 0.3s ease-out;
-            cursor: pointer;
-            width: 0px;
-            border-radius: 1.5rem;
-            height: 6px;
-            background: black;
-
-            .song-controller-volume-bar-inner {
-                height: 6px;
-                 border-radius: 0.7rem;
-                background: #ff8585;    
-            }
-        }
-        .open {
-            width: 70px;
-        }
-    }
+.open {
+  width: 70px;
 }
-.song-controller-button {
-            display: flex;
-            padding: 0.2rem;
-            background: transparent;
-            border-radius: 2rem;
-        }
 
 @keyframes progress {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
-    }
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation-duration: 0.5s;
+  animation-name: progress;
 }

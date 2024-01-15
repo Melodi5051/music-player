@@ -1,1 +1,1 @@
-export { SongController } from './_songController';
+export { SongController } from './_songController'
