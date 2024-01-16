@@ -2,7 +2,7 @@ import { ISong } from '~/widgets/types/song'
 import { SongContent } from '~/shared/SongContent'
 import { SongDuration } from '~/shared/SongDuration'
 import { SongLogo } from '~/shared/SongLogo'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SongController } from '~/shared/SongFooter'
 
 interface SongCardProps extends ISong {
@@ -11,21 +11,19 @@ interface SongCardProps extends ISong {
   setCurrentSongId: React.Dispatch<React.SetStateAction<number | null>>
   currentSong: React.MutableRefObject<HTMLAudioElement | null>
   intervaleDuration: React.MutableRefObject<NodeJS.Timer | null>
-}
-
-function progressDuration(duration: number): number {
-  const progress = (1 / duration) * 100
-  return progress
+  volume: number
+  setVolume: React.Dispatch<React.SetStateAction<number>>
+  index: number
+  handleNextSong: (index: number) => void
 }
 
 export function SongCard({ ...props }: SongCardProps) {
   const [duration, setDuration] = useState(props.duration)
   const [statusView, setStatusView] = useState(props.status.current)
-  const progress = useRef(progressDuration(props.duration))
   const [propgressView, setPropgressView] = useState(0)
 
-  function SetNewMusic() {
-    const audio = new Audio(`http://localhost:3000/${props.file}`)
+  function SetNewMusic(file: string) {
+    const audio = new Audio(`http://localhost:3000/${file}`)
 
     if (props.currentSong.current) {
       pauseMusic(props.currentSong.current)
@@ -34,7 +32,7 @@ export function SongCard({ ...props }: SongCardProps) {
     audio.onloadedmetadata = () => {
       setDuration(audio.duration)
       props.currentSong.current = audio
-      audio.volume = 0.1
+      audio.volume = props.volume
       playMusic(audio)
     }
 
@@ -50,6 +48,7 @@ export function SongCard({ ...props }: SongCardProps) {
       setPropgressView(currentPercentage)
       setDuration(audio.currentTime)
       if (audio.currentTime >= audio.duration) {
+        props.handleNextSong(props.index)
         clearInterval(timer)
         props.status.current = false
         setPropgressView(0)
@@ -72,7 +71,7 @@ export function SongCard({ ...props }: SongCardProps) {
   function handlePlay() {
     if (props.currentSongId !== props.id) {
       setStatusView(true)
-      SetNewMusic()
+      SetNewMusic(props.file)
 
       return
     }
@@ -91,16 +90,30 @@ export function SongCard({ ...props }: SongCardProps) {
   }
 
   useEffect(() => {
+    if (props.currentSong.current) {
+      props.currentSong.current.volume = props.volume
+    }
+  }, [props.volume])
+
+  useEffect(() => {
     if (props.currentSongId !== props.id) {
       setPropgressView(0)
       setDuration(props.duration)
     }
   })
 
+  useEffect(() => {
+    if (props.currentSongId === props.id && !statusView) {
+      SetNewMusic(props.file)
+      setStatusView(true)
+      console.log('@', 'вызов')
+    }
+  }, [props.currentSongId])
+
   return (
     <div className="flex flex-col w-full items-center justify-center">
       <div
-        className="flex items-center justify-around dark:bg-[#e2f0ff25]  py-0 px-4 rounded-xl w-full cursor-pointer"
+        className="flex items-center justify-around dark:bg-[#e2f0ff25] gap-4  py-0 px-4 rounded-xl w-full cursor-pointer"
         onClick={handlePlay}
       >
         <div className="flex items-center w-full gap-4">
@@ -117,6 +130,8 @@ export function SongCard({ ...props }: SongCardProps) {
           setPropgressView={setPropgressView}
           setDuration={setDuration}
           fullDuration={props.duration}
+          setVolume={props.setVolume}
+          volume={props.volume}
         />
       ) : null}
     </div>

@@ -16,8 +16,8 @@ export function SongDuration({ ...props }: SongDurationProps) {
 
   const className =
     props.type === 'play'
-      ? 'song-card-duration-play'
-      : 'song-card-duration-default'
+      ? 'song-card-duration-play dark:text-white'
+      : 'song-card-duration-default dark:text-white'
 
   // if (props.type === 'play' && props.id === props.currentSongId) {
   //   return <p className={className}>{formatDuration(props.duration)}</p>;

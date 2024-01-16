@@ -10,15 +10,25 @@ export function SongList() {
   const songData: ISong[] | null = useContext(SongContext)
   const {
     status,
+
     currentSongId,
     setCurrentSongId,
+
     currentSong,
     intervaleDuration,
+
+    volume,
+    setVolume,
   } = useSongContent()
+
+  const handleNextSong = (currentSongIndex: number) => {
+    setCurrentSongId(songData![currentSongIndex + 1].id)
+    status.current = false
+  }
 
   //Проверка на пустой контекст
   const songDataList = songData ? (
-    songData.map((song: SongProps) => (
+    songData.map((song: SongProps, index: number) => (
       <SongCard
         key={song.id}
         {...song}
@@ -27,6 +37,10 @@ export function SongList() {
         setCurrentSongId={setCurrentSongId}
         currentSong={currentSong}
         intervaleDuration={intervaleDuration}
+        volume={volume}
+        setVolume={setVolume}
+        index={index}
+        handleNextSong={handleNextSong}
       />
     ))
   ) : (

@@ -30,13 +30,16 @@ const useSongContent = () => {
   const currentSong = useRef<HTMLAudioElement | null>(null)
   const [currentSongId, setCurrentSongId] = useState<number | null>(null)
   const intervaleDuration = useRef<NodeJS.Timer | null>(null)
-
+  const [volume, setVolume] = useState<number>(0.01)
   const songData = {
     currentSong,
     status,
 
     currentSongId,
     setCurrentSongId,
+
+    volume,
+    setVolume,
 
     intervaleDuration,
   }
