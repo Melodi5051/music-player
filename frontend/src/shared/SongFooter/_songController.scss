@@ -1,0 +1,17 @@
+.open {
+  width: 70px;
+}
+
+@keyframes progress {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-progress {
+  animation-duration: 0.5s;
+  animation-name: progress;
+}
