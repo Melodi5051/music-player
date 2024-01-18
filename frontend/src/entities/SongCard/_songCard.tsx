@@ -2,138 +2,108 @@ import { ISong } from '~/widgets/types/song'
 import { SongContent } from '~/shared/SongContent'
 import { SongDuration } from '~/shared/SongDuration'
 import { SongLogo } from '~/shared/SongLogo'
+import { SongController } from '~/shared/SongController'
+import { songStore } from '~/app/providers/SongStore'
+import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
-import { SongController } from '~/shared/SongFooter'
+import { clickSong, newSong } from './handlers/songHandlers'
 
 interface SongCardProps extends ISong {
-  status: React.MutableRefObject<boolean>
-  currentSongId: number | null
-  setCurrentSongId: React.Dispatch<React.SetStateAction<number | null>>
-  currentSong: React.MutableRefObject<HTMLAudioElement | null>
-  intervaleDuration: React.MutableRefObject<NodeJS.Timer | null>
-  volume: number
-  setVolume: React.Dispatch<React.SetStateAction<number>>
-  index: number
-  handleNextSong: (index: number) => void
+  status: boolean
 }
 
-export function SongCard({ ...props }: SongCardProps) {
-  const [duration, setDuration] = useState(props.duration)
-  const [statusView, setStatusView] = useState(props.status.current)
-  const [propgressView, setPropgressView] = useState(0)
+export const SongCard = observer(function SongCard({
+  ...props
+}: SongCardProps) {
+  const [localStatus, setlocalStatus] = useState<boolean>(props.status)
+  const [duration, setDuration] = useState<number>(0)
 
-  function SetNewMusic(file: string) {
-    const audio = new Audio(`http://localhost:3000/${file}`)
-
-    if (props.currentSong.current) {
-      pauseMusic(props.currentSong.current)
+  const handlePlaySong = (songId: number) => {
+    if (songStore._songCurrentId === songId && songStore._songCurrent) {
+      clickSong(songStore._songCurrent, localStatus, setlocalStatus)
+      return
     }
-
-    audio.onloadedmetadata = () => {
-      setDuration(audio.duration)
-      props.currentSong.current = audio
-      audio.volume = props.volume
-      playMusic(audio)
-    }
-
-    props.setCurrentSongId(props.id)
-    props.status.current = true
+    newSong(props.file, props.id, setlocalStatus)
   }
 
-  function playMusic(audio: HTMLAudioElement) {
-    setDuration(audio.currentTime)
+  //НЕ ОПТИМИЗИРОВАНЫЙ ВАРИНАТ ЧЕРЕЗ REQUESTANIMATIONFRAME
 
-    const timer = setInterval(() => {
-      const currentPercentage = (audio.currentTime / audio.duration) * 100
-      setPropgressView(currentPercentage)
-      setDuration(audio.currentTime)
-      if (audio.currentTime >= audio.duration) {
-        props.handleNextSong(props.index)
-        clearInterval(timer)
-        props.status.current = false
-        setPropgressView(0)
-      }
-    }, 1000)
+  // const updateFrame = () => {
+  //   if (duration > props.duration) {
+  //     const handle = requestAnimationFrame(updateFrame)
+  //     cancelAnimationFrame(handle)
+  //     return
+  //   }
 
-    props.intervaleDuration.current = timer
+  //   if (songStore._songCurrent && songStore._songCurrentId === props.id) {
+  //     setDuration(songStore._songCurrent?.currentTime)
+  //   }
 
-    audio.play()
-    props.status.current = true
-  }
-  function pauseMusic(audio: HTMLAudioElement) {
-    if (props.intervaleDuration.current) {
-      clearInterval(props.intervaleDuration.current as unknown as number)
-    }
-    audio.pause()
-    props.status.current = false
-  }
+  //   requestAnimationFrame(updateFrame)
+  // }
 
-  function handlePlay() {
-    if (props.currentSongId !== props.id) {
-      setStatusView(true)
-      SetNewMusic(props.file)
+  // useEffect(() => {
+  //   const handle = requestAnimationFrame(updateFrame)
 
+  //   return () => {
+  //     cancelAnimationFrame(handle)
+  //   }
+  // }, [])
+
+  const updateFrame = () => {
+    if (duration > props.duration) {
       return
     }
 
-    if (statusView && props.currentSong.current) {
-      pauseMusic(props.currentSong.current)
-      setStatusView(false)
-      return
+    if (songStore._songCurrent && songStore._songCurrentId === props.id) {
+      setDuration(songStore._songCurrent?.currentTime)
     }
 
-    if (props.currentSong.current) {
-      playMusic(props.currentSong.current)
-      setStatusView(true)
-      return
-    }
+    setTimeout(updateFrame, 1000)
   }
 
   useEffect(() => {
-    if (props.currentSong.current) {
-      props.currentSong.current.volume = props.volume
-    }
-  }, [props.volume])
+    const handle = setTimeout(updateFrame, 1000)
 
-  useEffect(() => {
-    if (props.currentSongId !== props.id) {
-      setPropgressView(0)
-      setDuration(props.duration)
+    return () => {
+      clearTimeout(handle)
     }
-  })
+  }, [])
 
-  useEffect(() => {
-    if (props.currentSongId === props.id && !statusView) {
-      SetNewMusic(props.file)
-      setStatusView(true)
-      console.log('@', 'вызов')
-    }
-  }, [props.currentSongId])
+  const propsDuration = {
+    duration: songStore._songCurrentId === props.id ? duration : props.duration,
+  }
+
+  const propsController = {
+    status: localStatus,
+
+    maxVolume: 1,
+    volume: songStore.getVolume(),
+    setVolume: songStore.setVolume,
+
+    duration:
+      songStore._songCurrentId === props.id
+        ? songStore._songCurrent?.currentTime
+        : 0,
+    maxDuration: props.duration,
+    setDuration: setDuration,
+  }
 
   return (
     <div className="flex flex-col w-full items-center justify-center">
       <div
         className="flex items-center justify-around dark:bg-[#e2f0ff25] gap-4  py-0 px-4 rounded-xl w-full cursor-pointer"
-        onClick={handlePlay}
+        onClick={_ => handlePlaySong(props.id)}
       >
         <div className="flex items-center w-full gap-4">
           <SongLogo {...props} type="default" />
           <SongContent {...props} />
         </div>
-        <SongDuration duration={duration} type="default" />
+        <SongDuration {...propsDuration} type="default" />
       </div>
-      {props.currentSongId === props.id ? (
-        <SongController
-          status={statusView}
-          duration={propgressView}
-          currentSong={props.currentSong.current as HTMLAudioElement}
-          setPropgressView={setPropgressView}
-          setDuration={setDuration}
-          fullDuration={props.duration}
-          setVolume={props.setVolume}
-          volume={props.volume}
-        />
+      {songStore._songCurrentId === props.id ? (
+        <SongController {...propsController} />
       ) : null}
     </div>
   )
-}
+})

@@ -1,15 +1,14 @@
-import { SongControllerProvider } from '~/shared/_useSongContent'
+import { useEffect } from 'react'
+import { songStore } from '~/app/providers/SongStore'
 import SongList from '~/widgets/SongList'
-import { SongProviderContext } from '~/widgets/SongList/hook/useSongContext'
 
 export function Home() {
+  useEffect(() => {
+    songStore.setSongsData()
+  }, [])
   return (
     <div>
-      <SongProviderContext>
-        <SongControllerProvider>
-          <SongList />
-        </SongControllerProvider>
-      </SongProviderContext>
+      <SongList />
     </div>
   )
 }
