@@ -11,12 +11,14 @@ const clickSong = (
 
 const newSong = (
   file: string,
-  id: number,
-  setStatus: React.Dispatch<React.SetStateAction<boolean>>,
+  index: number,
+  setStatus?: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   const song = new Audio('http://localhost:3000/' + file)
-  songStore.setNewSong(song, id)
-  setStatus(true)
+  songStore.setNewSong(song, index)
+  if (setStatus) {
+    setStatus(true)
+  }
 }
 
 export { clickSong, newSong }

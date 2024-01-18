@@ -10,20 +10,20 @@ import { clickSong, newSong } from './handlers/songHandlers'
 
 interface SongCardProps extends ISong {
   status: boolean
+  index: number
+  onClick: (index: number) => void
 }
 
-export const SongCard = observer(function SongCard({
-  ...props
-}: SongCardProps) {
+export const SongCard = observer(function SongCard({ ...props }: SongCardProps) {
   const [localStatus, setlocalStatus] = useState<boolean>(props.status)
   const [duration, setDuration] = useState<number>(0)
 
   const handlePlaySong = (songId: number) => {
-    if (songStore._songCurrentId === songId && songStore._songCurrent) {
+    if (songStore._songCurrentIndex === songId && songStore._songCurrent) {
       clickSong(songStore._songCurrent, localStatus, setlocalStatus)
       return
     }
-    newSong(props.file, props.id, setlocalStatus)
+    newSong(props.file, props.index, setlocalStatus)
   }
 
   //НЕ ОПТИМИЗИРОВАНЫЙ ВАРИНАТ ЧЕРЕЗ REQUESTANIMATIONFRAME
@@ -51,11 +51,7 @@ export const SongCard = observer(function SongCard({
   // }, [])
 
   const updateFrame = () => {
-    if (duration > props.duration) {
-      return
-    }
-
-    if (songStore._songCurrent && songStore._songCurrentId === props.id) {
+    if (songStore._songCurrent && songStore._songCurrentIndex === props.index) {
       setDuration(songStore._songCurrent?.currentTime)
     }
 
@@ -70,8 +66,16 @@ export const SongCard = observer(function SongCard({
     }
   }, [])
 
+  useEffect(() => {
+    if (duration > props.duration) {
+      props.onClick(props.index + 1)
+      setlocalStatus(false)
+    }
+  }, [duration])
+
   const propsDuration = {
-    duration: songStore._songCurrentId === props.id ? duration : props.duration,
+    duration:
+      songStore._songCurrentIndex === props.index ? duration : props.duration,
   }
 
   const propsController = {
@@ -82,7 +86,7 @@ export const SongCard = observer(function SongCard({
     setVolume: songStore.setVolume,
 
     duration:
-      songStore._songCurrentId === props.id
+      songStore._songCurrentIndex === props.index
         ? songStore._songCurrent?.currentTime
         : 0,
     maxDuration: props.duration,
@@ -93,7 +97,7 @@ export const SongCard = observer(function SongCard({
     <div className="flex flex-col w-full items-center justify-center">
       <div
         className="flex items-center justify-around dark:bg-[#e2f0ff25] gap-4  py-0 px-4 rounded-xl w-full cursor-pointer"
-        onClick={_ => handlePlaySong(props.id)}
+        onClick={_ => handlePlaySong(props.index)}
       >
         <div className="flex items-center w-full gap-4">
           <SongLogo {...props} type="default" />
@@ -101,9 +105,12 @@ export const SongCard = observer(function SongCard({
         </div>
         <SongDuration {...propsDuration} type="default" />
       </div>
-      {songStore._songCurrentId === props.id ? (
+      {songStore._songCurrentIndex === props.index ? (
         <SongController {...propsController} />
       ) : null}
     </div>
   )
 })
+
+
+
